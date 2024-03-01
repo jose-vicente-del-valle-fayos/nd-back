@@ -71,8 +71,7 @@ func Ingresar(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(time.Hour * 12), // Expira en medio día
 		HTTPOnly: true,
 		Secure:   true, // Solo se enviará si la conexión es segura (HTTPS)
-		SameSite: "None",
-		Domain:   ".herokuapp.com",
+		SameSite: "Lax",
 	}
 	c.Cookie(&cookie)
 	return c.JSON(fiber.Map{
