@@ -7,14 +7,14 @@ import (
 )
 
 func Configuracion(app *fiber.App) {
-	app.Post("/api/registrar", controladores.Registrar)
+	// app.Post("/api/registrar", controladores.Registrar)
 	app.Post("/api/ingresar", controladores.Ingresar)
 	app.Get("/api/entrada/:id", controladores.LeerEntrada)
 	app.Get("/api/entradas", controladores.TodasEntradas)   // Muestra las entradas paginadas
 	app.Get("/api/todas", controladores.EntradasSinPaginar) // Muestra las entradas paginadas
 	app.Get("/api/especial", controladores.TodasEntradas)   // Muestra las entradas ver parametros del query
 	app.Get("/api/comentarios", controladores.TodosComentarios)
-	app.Post("/api/KzQ987h29KkYem", controladores.Escribeme)
+	// app.Post("/api/KzQ987h29KkYem", controladores.Escribeme)
 	app.Use(middlewares.Autenticado)
 	app.Get("/api/usuario", controladores.Usuario)
 	app.Post("/api/salir", controladores.Salir)
