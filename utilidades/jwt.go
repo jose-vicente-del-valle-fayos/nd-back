@@ -2,10 +2,11 @@ package utilidades
 
 import (
 	"github.com/golang-jwt/jwt/v5"
+	"os"
 	"time"
 )
 
-var secreto = []byte("CD56gY7Ytolpjkiu76549")
+var secreto = []byte(os.Getenv("SECRET_JWT"))
 
 func GenerarJWT(issuer string) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
