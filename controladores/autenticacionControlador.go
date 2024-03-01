@@ -88,9 +88,9 @@ func Usuario(c *fiber.Ctx) error {
 			"mensaje": "sin autenticar",
 		})
 	}
-
 	usuario := modelos.Usuario{}
 	bbdd.DB.Where("id = ?", id).First(&usuario)
+	fmt.Println(usuario)
 	return c.JSON(usuario)
 }
 
