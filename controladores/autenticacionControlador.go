@@ -1,6 +1,7 @@
 package controladores
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"nd-back/bbdd"
 	"nd-back/modelos"
@@ -79,9 +80,9 @@ func Ingresar(c *fiber.Ctx) error {
 
 func Usuario(c *fiber.Ctx) error {
 	cookie := c.Cookies("nd-jwt")
-
 	id, err := utilidades.ParsearJWT(cookie)
 	if err != nil {
+		fmt.Println(err)
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
 			"mensaje": "sin autenticar",
