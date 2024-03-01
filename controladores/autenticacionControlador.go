@@ -82,9 +82,10 @@ func Usuario(c *fiber.Ctx) error {
 	// cookie := c.Cookies("nd-jwt")
 	cookie := fiber.Cookie{
 		Name:     "nd-jwt",
-		HTTPOnly: true,  // La cookie solo es accesible mediante HTTP(S)
-		Secure:   true,  // Solo se enviará si la conexión es segura (HTTPS)
-		SameSite: "Lax", // Configuración de SameSite (puede ser "None", "Lax", o "Strict")
+		HTTPOnly: true, // La cookie solo es accesible mediante HTTP(S)
+		Secure:   true, // Solo se enviará si la conexión es segura (HTTPS)
+		SameSite: "Lax",
+		Domain:   ".herokuapp.com",
 	}
 	// Configurar la cookie en la respuesta
 	c.Cookie(&cookie)
