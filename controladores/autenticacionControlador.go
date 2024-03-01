@@ -1,7 +1,6 @@
 package controladores
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"nd-back/bbdd"
 	"nd-back/modelos"
@@ -71,6 +70,9 @@ func Ingresar(c *fiber.Ctx) error {
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 12), // Expira en medio día
 		HTTPOnly: true,
+		Secure:   true, // Solo se enviará si la conexión es segura (HTTPS)
+		SameSite: "None",
+		Domain:   ".herokuapp.com",
 	}
 	c.Cookie(&cookie)
 	return c.JSON(fiber.Map{
@@ -79,19 +81,9 @@ func Ingresar(c *fiber.Ctx) error {
 }
 
 func Usuario(c *fiber.Ctx) error {
-	// cookie := c.Cookies("nd-jwt")
-	cookie := fiber.Cookie{
-		Name:     "nd-jwt",
-		HTTPOnly: true, // La cookie solo es accesible mediante HTTP(S)
-		Secure:   true, // Solo se enviará si la conexión es segura (HTTPS)
-		SameSite: "None",
-		Domain:   ".herokuapp.com",
-	}
-	// Configurar la cookie en la respuesta
-	c.Cookie(&cookie)
-	id, err := utilidades.ParsearJWT(cookie.Value)
+	cookie := c.Cookies("nd-jwt")
+	id, err := utilidades.ParsearJWT(cookie)
 	if err != nil {
-		fmt.Println(err)
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
 			"mensaje": "sin autenticar",
@@ -99,7 +91,6 @@ func Usuario(c *fiber.Ctx) error {
 	}
 	usuario := modelos.Usuario{}
 	bbdd.DB.Where("id = ?", id).First(&usuario)
-	fmt.Println(usuario)
 	return c.JSON(usuario)
 }
 
