@@ -2,7 +2,7 @@ package bbdd
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"nd-back/modelos"
 	"os"
@@ -11,7 +11,8 @@ import (
 var DB *gorm.DB
 
 func Conectar() {
-	db, err := gorm.Open(mysql.Open(os.Getenv("DB_URL")), &gorm.Config{})
+	// db, err := gorm.Open(postgres.Open("postgresql://postgres:almasera@localhost:5432/nd"), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
 		panic("No se puede conectar a la base de datos.")
 	}
