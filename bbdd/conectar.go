@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 func Conectar() {
-	db, err := gorm.Open(mysql.Open(os.Getenv("DB_URL")), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(os.Getenv("CLEARDB_DATABASE_URL")), &gorm.Config{})
 	if err != nil {
 		panic("No se puede conectar a la base de datos.")
 	}
