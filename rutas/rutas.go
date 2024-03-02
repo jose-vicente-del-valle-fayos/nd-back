@@ -7,7 +7,7 @@ import (
 )
 
 func Configuracion(app *fiber.App) {
-	// app.Post("/registrar", controladores.Registrar)
+	app.Post("/registrar", controladores.Registrar)
 	app.Post("/ingresar", controladores.Ingresar)
 	app.Get("/entrada/:id", controladores.LeerEntrada)
 	app.Get("/entradas", controladores.TodasEntradas)   // Muestra las entradas paginadas
