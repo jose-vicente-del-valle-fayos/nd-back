@@ -57,7 +57,6 @@ func TodasEntradas(c *fiber.Ctx) error {
 func EntradasSinPaginar(c *fiber.Ctx) error {
 	var entradas []modelos.Entrada
 	bbdd.DB.Order("fecha desc").Find(&entradas)
-	bbdd.DB.Model(&modelos.Entrada{}).Count(&total)
 	for _, e1 := range entradas {
 		e1.Visitas += 1
 		bbdd.DB.Updates(&e1)
