@@ -55,7 +55,6 @@ func TodasEntradas(c *fiber.Ctx) error {
 }
 
 func EntradasSinPaginar(c *fiber.Ctx) error {
-	var total int64
 	var entradas []modelos.Entrada
 	bbdd.DB.Order("fecha desc").Find(&entradas)
 	bbdd.DB.Model(&modelos.Entrada{}).Count(&total)
@@ -79,9 +78,6 @@ func EntradasSinPaginar(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"datos": entradasArregladas,
-		"meta": fiber.Map{
-			"total": total,
-		},
 	})
 }
 
