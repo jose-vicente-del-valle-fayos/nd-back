@@ -58,7 +58,7 @@ func TodasEntradas(c *fiber.Ctx) error {
 func EntradasSinPaginar(c *fiber.Ctx) error {
 	var entradas []modelos.Entrada
 	bbdd.DB.Order("fecha desc").Find(&entradas)
-	fmt.Println(entradas)
+	fmt.Println("entradas", entradas)
 	for _, e1 := range entradas {
 		e1.Visitas += 1
 		bbdd.DB.Updates(&e1)
@@ -77,7 +77,7 @@ func EntradasSinPaginar(c *fiber.Ctx) error {
 		e2.Comentarios = comentariosArreglados
 		entradasArregladas = append(entradasArregladas, e2)
 	}
-	fmt.Println(entradasArregladas)
+	fmt.Println("entradas arregladas", entradasArregladas)
 	return c.JSON(fiber.Map{
 		"datos": entradasArregladas,
 	})
