@@ -54,10 +54,12 @@ func Ingresar(c *fiber.Ctx) error {
 	usuario := modelos.Usuario{}
 	bbdd.DB.Where("correo", datos["correo"]).First(&usuario)
 	if usuario.Id == 0 {
+		time.Sleep(3 * time.Second)
 		c.Status(404)
 		return c.JSON(fiber.Map{"mensaje": "usuario no encontrado"})
 	}
 	if err := usuario.ComparaContrasenas(datos["contrasena"]); err != nil {
+		time.Sleep(3 * time.Second)
 		c.Status(400)
 		return c.JSON(fiber.Map{"mensaje": "el nombre de usuario o la contraseña no son correctos"})
 	}
