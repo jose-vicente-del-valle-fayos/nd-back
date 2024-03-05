@@ -12,9 +12,6 @@ func TodosComentarios(c *fiber.Ctx) error {
 	bbdd.DB.Find(&comentarios)
 	var total int64
 	bbdd.DB.Model(&comentarios).Count(&total)
-	for _, e := range comentarios {
-		e.FormatearFecha(e.Fecha)
-	}
 	return c.JSON(fiber.Map{
 		"datos": comentarios,
 		"meta": fiber.Map{
@@ -50,7 +47,6 @@ func LeerComentario(c *fiber.Ctx) error {
 		Id: uint(id),
 	}
 	bbdd.DB.Find(&comentario)
-	comentario.FormatearFecha(comentario.Fecha)
 	return c.JSON(comentario)
 }
 

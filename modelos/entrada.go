@@ -1,10 +1,5 @@
 package modelos
 
-import (
-	"fmt"
-	"time"
-)
-
 const layoutFechaNumericae string = "2006-01-02"
 
 var dayse = [...]string{
@@ -27,15 +22,6 @@ type Entrada struct {
 	Comentarios []Comentario `json:"comentarios" gorm:"foreignKey:IdEnt"`
 	TotalCom    uint         `json:"total_com" gorm:"-"`
 	Visitas     uint         `json:"visitas" gorm:"default:0"`
-}
-
-func (entrada *Entrada) FormatearFecha(fecha string) {
-	t, e := time.Parse(layoutFechaNumericae, fecha)
-	if e != nil {
-		panic(e)
-	}
-	entrada.Fecha = fmt.Sprintf("%s %d, %d",
-		/*dayse[t.Weekday()],*/ monthse[t.Month()-1], t.Day(), t.Year())
 }
 
 func (entrada *Entrada) CalcularTotalComentarios() {

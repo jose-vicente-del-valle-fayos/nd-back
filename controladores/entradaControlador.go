@@ -32,14 +32,7 @@ func TodasEntradas(c *fiber.Ctx) error {
 	}
 	var entradasArregladas []modelos.Entrada
 	for _, e2 := range entradas {
-		e2.FormatearFecha(e2.Fecha)
 		e2.CalcularTotalComentarios()
-		var comentariosArreglados []modelos.Comentario
-		for _, e3 := range e2.Comentarios {
-			e3.FormatearFecha(e3.Fecha)
-			comentariosArreglados = append(comentariosArreglados, e3)
-		}
-		e2.Comentarios = comentariosArreglados
 		entradasArregladas = append(entradasArregladas, e2)
 	}
 	return c.JSON(fiber.Map{
@@ -61,14 +54,7 @@ func EntradasSinPaginar(c *fiber.Ctx) error {
 	}
 	var entradasArregladas []modelos.Entrada
 	for _, e2 := range entradas {
-		e2.FormatearFecha(e2.Fecha)
 		e2.CalcularTotalComentarios()
-		var comentariosArreglados []modelos.Comentario
-		for _, e3 := range e2.Comentarios {
-			e3.FormatearFecha(e3.Fecha)
-			comentariosArreglados = append(comentariosArreglados, e3)
-		}
-		e2.Comentarios = comentariosArreglados
 		entradasArregladas = append(entradasArregladas, e2)
 	}
 	return c.JSON(fiber.Map{
@@ -106,14 +92,7 @@ func LeerEntrada(c *fiber.Ctx) error {
 	bbdd.DB.Preload("Comentarios").Find(&entrada)
 	entrada.Visitas = entrada.Visitas + 1
 	bbdd.DB.Updates(&entrada)
-	entrada.FormatearFecha(entrada.Fecha)
 	entrada.CalcularTotalComentarios()
-	var comentariosArreglados []modelos.Comentario
-	for _, e1 := range entrada.Comentarios {
-		e1.FormatearFecha(e1.Fecha)
-		comentariosArreglados = append(comentariosArreglados, e1)
-	}
-	entrada.Comentarios = comentariosArreglados
 	return c.JSON(fiber.Map{
 		"datos": entrada,
 	})

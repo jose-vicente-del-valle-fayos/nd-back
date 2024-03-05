@@ -1,10 +1,5 @@
 package modelos
 
-import (
-	"fmt"
-	"time"
-)
-
 const layoutFechaNumericac string = "2006-01-02"
 
 var daysc = [...]string{
@@ -22,13 +17,4 @@ type Comentario struct {
 	Correo     string `json:"correo" gorm:"type:VARCHAR(50); not null"`
 	Fecha      string `json:"fecha" gorm:"type:VARCHAR(10); not null"`
 	Comentario string `json:"comentario" gorm:"not null"`
-}
-
-func (com *Comentario) FormatearFecha(fecha string) {
-	t, e := time.Parse(layoutFechaNumericac, fecha)
-	if e != nil {
-		panic(e)
-	}
-	com.Fecha = fmt.Sprintf("%s %d, %d",
-		/*daysc[t.Weekday()],*/ monthsc[t.Month()-1], t.Day(), t.Year())
 }
