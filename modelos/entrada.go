@@ -2,8 +2,6 @@ package modelos
 
 import (
 	"fmt"
-	"github.com/gomarkdown/markdown"
-	"html"
 	"time"
 )
 
@@ -38,11 +36,6 @@ func (entrada *Entrada) FormatearFecha(fecha string) {
 	}
 	entrada.Fecha = fmt.Sprintf("%s %d, %d",
 		/*dayse[t.Weekday()],*/ monthse[t.Month()-1], t.Day(), t.Year())
-}
-
-func (entrada *Entrada) FormatearMarkdown(contenido string) {
-	entrada.Contenido = html.UnescapeString(string(markdown.ToHTML(
-		markdown.NormalizeNewlines([]byte(contenido)), nil, nil)))
 }
 
 func (entrada *Entrada) CalcularTotalComentarios() {

@@ -2,8 +2,6 @@ package modelos
 
 import (
 	"fmt"
-	"github.com/gomarkdown/markdown"
-	"html"
 	"time"
 )
 
@@ -33,9 +31,4 @@ func (com *Comentario) FormatearFecha(fecha string) {
 	}
 	com.Fecha = fmt.Sprintf("%s %d, %d",
 		/*daysc[t.Weekday()],*/ monthsc[t.Month()-1], t.Day(), t.Year())
-}
-
-func (com *Comentario) FormatearMarkdown(comentario string) {
-	com.Comentario = html.UnescapeString(string(markdown.ToHTML(
-		markdown.NormalizeNewlines([]byte(comentario)), nil, nil)))
 }

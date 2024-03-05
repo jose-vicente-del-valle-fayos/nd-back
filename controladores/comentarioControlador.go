@@ -14,7 +14,6 @@ func TodosComentarios(c *fiber.Ctx) error {
 	bbdd.DB.Model(&comentarios).Count(&total)
 	for _, e := range comentarios {
 		e.FormatearFecha(e.Fecha)
-		e.FormatearMarkdown(e.Comentario)
 	}
 	return c.JSON(fiber.Map{
 		"datos": comentarios,
@@ -52,7 +51,6 @@ func LeerComentario(c *fiber.Ctx) error {
 	}
 	bbdd.DB.Find(&comentario)
 	comentario.FormatearFecha(comentario.Fecha)
-	comentario.FormatearMarkdown(comentario.Comentario)
 	return c.JSON(comentario)
 }
 

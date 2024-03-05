@@ -33,12 +33,10 @@ func TodasEntradas(c *fiber.Ctx) error {
 	var entradasArregladas []modelos.Entrada
 	for _, e2 := range entradas {
 		e2.FormatearFecha(e2.Fecha)
-		e2.FormatearMarkdown(e2.Contenido)
 		e2.CalcularTotalComentarios()
 		var comentariosArreglados []modelos.Comentario
 		for _, e3 := range e2.Comentarios {
 			e3.FormatearFecha(e3.Fecha)
-			e3.FormatearMarkdown(e3.Comentario)
 			comentariosArreglados = append(comentariosArreglados, e3)
 		}
 		e2.Comentarios = comentariosArreglados
@@ -64,12 +62,10 @@ func EntradasSinPaginar(c *fiber.Ctx) error {
 	var entradasArregladas []modelos.Entrada
 	for _, e2 := range entradas {
 		e2.FormatearFecha(e2.Fecha)
-		e2.FormatearMarkdown(e2.Contenido)
 		e2.CalcularTotalComentarios()
 		var comentariosArreglados []modelos.Comentario
 		for _, e3 := range e2.Comentarios {
 			e3.FormatearFecha(e3.Fecha)
-			e3.FormatearMarkdown(e3.Comentario)
 			comentariosArreglados = append(comentariosArreglados, e3)
 		}
 		e2.Comentarios = comentariosArreglados
@@ -111,12 +107,10 @@ func LeerEntrada(c *fiber.Ctx) error {
 	entrada.Visitas = entrada.Visitas + 1
 	bbdd.DB.Updates(&entrada)
 	entrada.FormatearFecha(entrada.Fecha)
-	entrada.FormatearMarkdown(entrada.Contenido)
 	entrada.CalcularTotalComentarios()
 	var comentariosArreglados []modelos.Comentario
 	for _, e1 := range entrada.Comentarios {
 		e1.FormatearFecha(e1.Fecha)
-		e1.FormatearMarkdown(e1.Comentario)
 		comentariosArreglados = append(comentariosArreglados, e1)
 	}
 	entrada.Comentarios = comentariosArreglados
