@@ -2,6 +2,8 @@ package controladores
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"math"
 	"nd-back/bbdd"
 	"nd-back/modelos"
@@ -25,18 +27,15 @@ func TodasEntradas(c *fiber.Ctx) error {
 	var total int64
 	var entradas []modelos.Entrada
 	bbdd.DB.Preload("Comentarios").Where("especial", especial).Order("fecha desc").Offset(offset).Limit(limite).Find(&entradas)
+	bbdd.DB.Model(&entradas).Clauses(clause.Returning{}).Where("especial", especial).Order("fecha desc").Offset(offset).Limit(limite).Update("visitas", gorm.Expr("visitas + ?", 1))
 	bbdd.DB.Model(&modelos.Entrada{}).Where("especial", especial).Count(&total)
+	var entradasConTotalCom []modelos.Entrada
 	for _, e1 := range entradas {
-		temp := e1.Visitas + 1
-		bbdd.DB.Model(&e1).Updates(modelos.Entrada{Visitas: temp})
-	}
-	var entradasArregladas []modelos.Entrada
-	for _, e2 := range entradas {
-		e2.CalcularTotalComentarios()
-		entradasArregladas = append(entradasArregladas, e2)
+		e1.CalcularTotalComentarios()
+		entradasConTotalCom = append(entradasConTotalCom, e1)
 	}
 	return c.JSON(fiber.Map{
-		"datos": entradasArregladas,
+		"datos": entradasConTotalCom,
 		"meta": fiber.Map{
 			"total":         total,
 			"pagina":        pagina,
