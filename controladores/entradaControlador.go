@@ -27,8 +27,8 @@ func TodasEntradas(c *fiber.Ctx) error {
 	bbdd.DB.Preload("Comentarios").Where("especial", especial).Order("fecha desc").Offset(offset).Limit(limite).Find(&entradas)
 	bbdd.DB.Model(&modelos.Entrada{}).Where("especial", especial).Count(&total)
 	for _, e1 := range entradas {
-		e1.Visitas += 1
-		bbdd.DB.Updates(&e1)
+		temp := e1.Visitas + 1
+		bbdd.DB.Model(&e1).Updates(modelos.Entrada{Visitas: temp})
 	}
 	var entradasArregladas []modelos.Entrada
 	for _, e2 := range entradas {
@@ -48,17 +48,8 @@ func TodasEntradas(c *fiber.Ctx) error {
 func EntradasSinPaginar(c *fiber.Ctx) error {
 	var entradas []modelos.Entrada
 	bbdd.DB.Select("Id", "Titulo", "Fecha").Order("fecha desc").Find(&entradas)
-	for _, e1 := range entradas {
-		e1.Visitas += 1
-		bbdd.DB.Updates(&e1)
-	}
-	var entradasArregladas []modelos.Entrada
-	for _, e2 := range entradas {
-		e2.CalcularTotalComentarios()
-		entradasArregladas = append(entradasArregladas, e2)
-	}
 	return c.JSON(fiber.Map{
-		"datos": entradasArregladas,
+		"datos": entradas,
 	})
 }
 
