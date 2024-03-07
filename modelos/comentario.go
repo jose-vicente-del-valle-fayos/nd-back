@@ -20,3 +20,19 @@ func (comentario *Comentario) ValidarFecha() bool {
 		return true
 	}
 }
+
+func (comentario *Comentario) ValidarIdEnt() bool {
+	return comentario.IdEnt != 0
+}
+
+func (comentario *Comentario) ValidarUsuario() bool {
+	return comentario.Usuario != ""
+}
+
+func (comentario *Comentario) ValidarCorreo() bool {
+	return comentario.Correo != ""
+}
+
+func (comentario *Comentario) ValidarComentario() bool {
+	return comentario.Comentario != ""
+}

@@ -34,7 +34,7 @@ func CrearComentario(c *fiber.Ctx) error {
 	if err := c.BodyParser(&comentario); err != nil {
 		return err
 	}
-	if comentario.ValidarFecha() && (comentario.IdEnt != 0) && (comentario.Usuario != "") && (comentario.Correo != "") && (comentario.Comentario != "") {
+	if comentario.ValidarFecha() && comentario.ValidarIdEnt() && comentario.ValidarUsuario() && comentario.ValidarCorreo() && comentario.ValidarComentario() {
 		bbdd.DB.Create(&comentario)
 		return c.JSON(comentario)
 	}
@@ -73,8 +73,11 @@ func ActualizarComentario(c *fiber.Ctx) error {
 	if err := c.BodyParser(&comentario); err != nil {
 		return err
 	}
-	bbdd.DB.Model(&comentario).Updates(comentario)
-	return c.JSON(comentario)
+	if comentario.ValidarFecha() && comentario.ValidarIdEnt() && comentario.ValidarUsuario() && comentario.ValidarCorreo() && comentario.ValidarComentario() {
+		bbdd.DB.Model(&comentario).Updates(comentario)
+		return c.JSON(comentario)
+	}
+	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
 func BorrarComentario(c *fiber.Ctx) error {

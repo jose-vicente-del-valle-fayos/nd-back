@@ -63,7 +63,7 @@ func CrearEntrada(c *fiber.Ctx) error {
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
 	}
-	if entrada.ValidarFecha() && (entrada.IdUs != 0) && (entrada.Usuario != "") && (entrada.Titulo != "") && (entrada.Contenido != "") {
+	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
 		bbdd.DB.Create(&entrada)
 		return c.JSON(entrada)
 	}
@@ -105,8 +105,11 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
 	}
-	bbdd.DB.Model(&entrada).Updates(entrada)
-	return c.JSON(entrada)
+	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
+		bbdd.DB.Model(&entrada).Updates(entrada)
+		return c.JSON(entrada)
+	}
+	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
 func BorrarEntrada(c *fiber.Ctx) error {

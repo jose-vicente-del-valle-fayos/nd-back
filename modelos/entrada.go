@@ -29,3 +29,19 @@ func (entrada *Entrada) ValidarFecha() bool {
 		return true
 	}
 }
+
+func (entrada *Entrada) ValidarIdUs() bool {
+	return entrada.IdUs != 0
+}
+
+func (entrada *Entrada) ValidarUsuario() bool {
+	return entrada.Usuario != ""
+}
+
+func (entrada *Entrada) ValidarTitulo() bool {
+	return entrada.Titulo != ""
+}
+
+func (entrada *Entrada) ValidarContenido() bool {
+	return entrada.Contenido != ""
+}
