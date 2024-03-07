@@ -63,8 +63,11 @@ func CrearEntrada(c *fiber.Ctx) error {
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
 	}
-	bbdd.DB.Create(&entrada)
-	return c.JSON(entrada)
+	if entrada.ValidarFecha() && (entrada.IdUs != 0) && (entrada.Usuario != "") && (entrada.Titulo != "") && (entrada.Contenido != "") {
+		bbdd.DB.Create(&entrada)
+		return c.JSON(entrada)
+	}
+	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
 func LeerEntrada(c *fiber.Ctx) error {

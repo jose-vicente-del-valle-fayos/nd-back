@@ -1,14 +1,6 @@
 package modelos
 
-const layoutFechaNumericac string = "2006-01-02"
-
-var daysc = [...]string{
-	"domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
-}
-var monthsc = [...]string{
-	"enero", "febrero", "marzo", "abril", "mayo", "junio",
-	"julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-}
+import "time"
 
 type Comentario struct {
 	Id         uint   `json:"id" gorm:"unique"`
@@ -17,4 +9,14 @@ type Comentario struct {
 	Correo     string `json:"correo" gorm:"type:VARCHAR(50); not null"`
 	Fecha      string `json:"fecha" gorm:"type:VARCHAR(10); not null"`
 	Comentario string `json:"comentario" gorm:"not null"`
+}
+
+func (comentario *Comentario) ValidarFecha() bool {
+	const layoutFechaNumerica string = "2006-01-02"
+	_, e := time.Parse(layoutFechaNumerica, comentario.Fecha)
+	if e != nil {
+		return false
+	} else {
+		return true
+	}
 }

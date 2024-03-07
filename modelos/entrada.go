@@ -1,14 +1,6 @@
 package modelos
 
-const layoutFechaNumericae string = "2006-01-02"
-
-var dayse = [...]string{
-	"domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
-}
-var monthse = [...]string{
-	"enero", "febrero", "marzo", "abril", "mayo", "junio",
-	"julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-}
+import "time"
 
 type Entrada struct {
 	Id        uint   `json:"id" gorm:"unique"`
@@ -26,4 +18,14 @@ type Entrada struct {
 
 func (entrada *Entrada) CalcularTotalComentarios() {
 	entrada.TotalCom = uint(len(entrada.Comentarios))
+}
+
+func (entrada *Entrada) ValidarFecha() bool {
+	const layoutFechaNumerica string = "2006-01-02"
+	_, e := time.Parse(layoutFechaNumerica, entrada.Fecha)
+	if e != nil {
+		return false
+	} else {
+		return true
+	}
 }
