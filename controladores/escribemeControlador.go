@@ -22,13 +22,13 @@ func Escribeme(c *fiber.Ctx) error {
 	*/
 	if _, ok := formEmpezarTiempo[c.IP()]; !ok {
 		// Si formEmpezarTiempo[c.IP()] no está definido
-		formEmpezarTiempo[c.IP()] = time.Now().Add(-1760 * time.Second)
+		formEmpezarTiempo[c.IP()] = time.Now().Add(-1800 * time.Second)
 	}
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
 		return err
 	}
-	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (time.Since(formEmpezarTiempo[c.IP()]) < 1800*time.Second) {
+	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (time.Since(formEmpezarTiempo[c.IP()]) > 1800*time.Second) {
 		m := gomail.NewMessage()
 		m.SetHeader("From", m.FormatAddress(os.Getenv("CORREO_FROM"), "Nuestro Diario") /* email */)
 		m.SetHeader("To", os.Getenv("CORREO_TO"))
