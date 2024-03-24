@@ -22,7 +22,7 @@ func Escribeme(c *fiber.Ctx) error {
 	*/
 	if _, ok := formEmpezarTiempo[c.IP()]; !ok {
 		// Si formEmpezarTiempo[c.IP()] no está definido
-		formEmpezarTiempo[c.IP()] = time.Now().Add(-1860 * time.Second)
+		formEmpezarTiempo[c.IP()] = time.Now().Add(-1760 * time.Second)
 	}
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
