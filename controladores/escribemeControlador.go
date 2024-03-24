@@ -20,15 +20,19 @@ func Escribeme(c *fiber.Ctx) error {
 			"mensaje": "Hola chevi. Qué tal estás?"
 		}
 	*/
+	to, err := strconv.Atoi(os.Getenv("CORREO_TIMEOUT"))
+	if err != nil {
+		return err
+	}
 	if _, ok := formEmpezarTiempo[c.IP()]; !ok {
 		// Si formEmpezarTiempo[c.IP()] no está definido
-		formEmpezarTiempo[c.IP()] = time.Now().Add(-1800 * time.Second)
+		formEmpezarTiempo[c.IP()] = time.Now().Add(time.Duration(-1*to) * time.Second)
 	}
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
 		return err
 	}
-	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (time.Since(formEmpezarTiempo[c.IP()]) > 1800*time.Second) {
+	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (time.Since(formEmpezarTiempo[c.IP()]) > time.Duration(-1*to)*time.Second) {
 		m := gomail.NewMessage()
 		m.SetHeader("From", m.FormatAddress(os.Getenv("CORREO_FROM"), "Nuestro Diario") /* email */)
 		m.SetHeader("To", os.Getenv("CORREO_TO"))
