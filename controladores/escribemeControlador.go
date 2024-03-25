@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var formEmpezarTiempo = make(map[string]time.Time)
+var formEmpezarTiempo time.Time
 
 func Escribeme(c *fiber.Ctx) error {
 	/*
@@ -20,19 +20,16 @@ func Escribeme(c *fiber.Ctx) error {
 			"mensaje": "Hola chevi. Qué tal estás?"
 		}
 	*/
-	to, err := strconv.Atoi(os.Getenv("CORREO_TIMEOUT"))
-	if err != nil {
-		return err
-	}
-	if _, ok := formEmpezarTiempo[c.IP()]; !ok {
-		// Si formEmpezarTiempo[c.IP()] no está definido
-		formEmpezarTiempo[c.IP()] = time.Now().Add(time.Duration(-1*to) * time.Second)
-	}
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
 		return err
 	}
-	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (time.Since(formEmpezarTiempo[c.IP()]) > time.Duration(-1*to)*time.Second) {
+	to, err := strconv.Atoi(os.Getenv("CORREO_TIMEOUT"))
+	if err != nil {
+		return err
+	}
+	tiempoTranscurrido := time.Since(formEmpezarTiempo)
+	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && (tiempoTranscurrido > time.Duration(to)*time.Second) {
 		m := gomail.NewMessage()
 		m.SetHeader("From", m.FormatAddress(os.Getenv("CORREO_FROM"), "Nuestro Diario") /* email */)
 		m.SetHeader("To", os.Getenv("CORREO_TO"))
@@ -45,7 +42,7 @@ func Escribeme(c *fiber.Ctx) error {
 		if err != nil {
 			return err
 		} else {
-			formEmpezarTiempo[c.IP()] = time.Now()
+			formEmpezarTiempo = time.Now()
 			return c.JSON(correo)
 		}
 	} else {
