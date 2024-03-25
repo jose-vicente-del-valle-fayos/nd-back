@@ -25,11 +25,11 @@ func TodasEntradas(c *fiber.Ctx) error {
 	offset := (pagina - 1) * limite
 	var total int64
 	var entradas []modelos.Entrada
-	bbdd.DB.Preload("Comentarios").Where("especial", especial).Order("fecha desc").Offset(offset).Limit(limite).Find(&entradas)
+	bbdd.DB.Preload("Comentarios").Where("especial = ?", especial).Order("fecha desc").Offset(offset).Limit(limite).Find(&entradas)
 	for i := range entradas {
 		bbdd.DB.Model(&entradas[i]).Update("visitas", gorm.Expr("visitas + ?", 1))
 	}
-	bbdd.DB.Model(&modelos.Entrada{}).Where("especial", especial).Count(&total)
+	bbdd.DB.Model(&modelos.Entrada{}).Where("especial = ?", especial).Count(&total)
 	return c.JSON(fiber.Map{
 		"datos": entradas,
 		"meta": fiber.Map{
@@ -75,7 +75,7 @@ func LeerEntrada(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	bbdd.DB.Model(&modelos.Entrada{}).Where("id", id).Update("visitas", gorm.Expr("visitas + ?", 1))
+	bbdd.DB.Model(&modelos.Entrada{}).Where("id = ?", id).Update("visitas", gorm.Expr("visitas + ?", 1))
 	var entrada modelos.Entrada
 	bbdd.DB.Preload("Comentarios").Find(&entrada, id)
 	return c.JSON(fiber.Map{

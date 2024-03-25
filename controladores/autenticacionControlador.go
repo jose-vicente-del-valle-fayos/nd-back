@@ -52,7 +52,7 @@ func Ingresar(c *fiber.Ctx) error {
 		return err
 	}
 	usuario := modelos.Usuario{}
-	bbdd.DB.Where("correo", datos["correo"]).First(&usuario)
+	bbdd.DB.Where("correo = ?", datos["correo"]).First(&usuario)
 	if usuario.Id == 0 {
 		time.Sleep(3 * time.Second)
 		c.Status(404)
