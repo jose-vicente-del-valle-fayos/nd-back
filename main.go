@@ -13,7 +13,7 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin, Authorization",
-		AllowOrigins:     "https://www.nuestrodiario.es", // https://nd-front.onrender.com, http://localhost:3000
+		AllowOrigins:     "https://nuestrodiario.es, https://www.nuestrodiario.es", // http://localhost:3000
 		AllowCredentials: true,
 		AllowMethods:     "GET, POST, PUT, DELETE",
 		MaxAge:           86400,
