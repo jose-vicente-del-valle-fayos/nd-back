@@ -6,10 +6,12 @@ import (
 	"math"
 	"nd-back/bbdd"
 	"nd-back/modelos"
+	"os"
 	"strconv"
 )
 
 func TodasEntradas(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	limite, err := strconv.Atoi(c.Query("limite", strconv.Itoa(math.MaxInt32)))
 	if err != nil {
 		return err
@@ -41,6 +43,7 @@ func TodasEntradas(c *fiber.Ctx) error {
 }
 
 func EntradasSinPaginar(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var entradas []modelos.Entrada
 	bbdd.DB.Select("Id", "Titulo", "Fecha", "Contenido").Order("fecha desc").Find(&entradas)
 	return c.JSON(fiber.Map{
@@ -59,6 +62,7 @@ func CrearEntrada(c *fiber.Ctx) error {
 			"contenido": "Este es un contenido fantástico."
 		}
 	*/
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var entrada modelos.Entrada
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
@@ -71,6 +75,7 @@ func CrearEntrada(c *fiber.Ctx) error {
 }
 
 func LeerEntrada(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -95,6 +100,7 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 			"comentarios": []
 		}
 	*/
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -113,6 +119,7 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 }
 
 func BorrarEntrada(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err

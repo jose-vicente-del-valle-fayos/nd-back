@@ -4,10 +4,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"nd-back/bbdd"
 	"nd-back/modelos"
+	"os"
 	"strconv"
 )
 
 func TodosComentarios(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var comentarios []modelos.Comentario
 	bbdd.DB.Find(&comentarios)
 	var total int64
@@ -30,6 +32,7 @@ func CrearComentario(c *fiber.Ctx) error {
 			"comentario": "Hola Chevi. Eres el mejor."
 		}
 	*/
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var comentario modelos.Comentario
 	if err := c.BodyParser(&comentario); err != nil {
 		return err
@@ -42,6 +45,7 @@ func CrearComentario(c *fiber.Ctx) error {
 }
 
 func LeerComentario(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -63,6 +67,7 @@ func ActualizarComentario(c *fiber.Ctx) error {
 			"comentario": "Hola Chevi. Eres el mejor del mundo mundial."
 		}
 	*/
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -81,6 +86,7 @@ func ActualizarComentario(c *fiber.Ctx) error {
 }
 
 func BorrarComentario(c *fiber.Ctx) error {
+	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err

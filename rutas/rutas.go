@@ -1,14 +1,23 @@
 package rutas
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"nd-back/controladores"
 	"nd-back/middlewares"
 	"nd-back/utilidades"
+	"os"
+	"strconv"
 )
 
 func Configuracion(app *fiber.App) {
-	// app.Post("/registrar", utilidades.Waf(controladores.Registrar))
+	reg, err := strconv.ParseBool(os.Getenv("REGISTRAR_ENABLED"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	if reg {
+		app.Post("/registrar", controladores.Registrar)
+	}
 	app.Post("/ingresar", utilidades.Waf(controladores.Ingresar))
 	app.Get("/entrada/:id", utilidades.Waf(controladores.LeerEntrada))
 	app.Get("/entradas", utilidades.Waf(controladores.TodasEntradas))   // Muestra las entradas paginadas
@@ -31,5 +40,4 @@ func Configuracion(app *fiber.App) {
 	app.Delete("/entrada/:id", utilidades.Waf(controladores.BorrarEntrada))
 	app.Delete("/comentario/:id", utilidades.Waf(controladores.BorrarComentario))
 	app.Get("/usuarios", utilidades.Waf(controladores.TodosUsuarios))
-
 }
