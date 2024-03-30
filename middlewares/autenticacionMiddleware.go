@@ -10,7 +10,7 @@ func Autenticado(c *fiber.Ctx) error {
 	if _, err := utilidades.ParsearJWT(cookie); err != nil {
 		c.Status(fiber.StatusUnauthorized)
 		return c.JSON(fiber.Map{
-			"Mensaje": "Sin autenticar.",
+			"mensaje": "sin autenticar.",
 		})
 	}
 	return c.Next()

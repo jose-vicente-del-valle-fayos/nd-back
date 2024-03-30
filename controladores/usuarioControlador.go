@@ -4,12 +4,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"nd-back/bbdd"
 	"nd-back/modelos"
-	"os"
 	"strconv"
 )
 
 func TodosUsuarios(c *fiber.Ctx) error {
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var usuarios []modelos.Usuario
 	bbdd.DB.Preload("Entradas").Preload("Entradas.Comentarios").Find(&usuarios)
 	return c.JSON(usuarios)
@@ -24,7 +22,6 @@ func CrearUsuario(c *fiber.Ctx) error {
 			"correo":      "hola@chevi.soy"
 		}
 	*/
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var usuario modelos.Usuario
 	if err := c.BodyParser(&usuario); err != nil {
 		return err
@@ -35,7 +32,6 @@ func CrearUsuario(c *fiber.Ctx) error {
 }
 
 func LeerUsuario(c *fiber.Ctx) error {
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -57,7 +53,6 @@ func ActualizarUsuario(c *fiber.Ctx) error {
 			"correo":      "pato@gmail.com"
 		}
 	*/
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -74,7 +69,6 @@ func ActualizarUsuario(c *fiber.Ctx) error {
 
 /*
 func BorrarUsuario(c *fiber.Ctx) error {
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err

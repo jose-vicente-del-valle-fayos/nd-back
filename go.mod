@@ -46,7 +46,6 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/kitabisa/teler-waf v1.3.0 // indirect
 	github.com/klauspost/compress v1.17.7 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/magefile/mage v1.15.0 // indirect
@@ -68,7 +67,6 @@ require (
 	github.com/samber/lo v1.39.0 // indirect
 	github.com/scorpionknifes/go-pcre v0.0.0-20210805092536-77486363b797 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
-	github.com/teler-sh/dsl v1.0.1 // indirect
 	github.com/tidwall/gjson v1.17.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect

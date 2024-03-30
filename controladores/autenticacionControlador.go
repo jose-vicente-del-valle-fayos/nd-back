@@ -5,7 +5,6 @@ import (
 	"nd-back/bbdd"
 	"nd-back/modelos"
 	"nd-back/utilidades"
-	"os"
 	"strconv"
 	"time"
 )
@@ -21,7 +20,6 @@ func Registrar(c *fiber.Ctx) error {
 		    "contrasenaconf": "almasera"
 		}
 	*/
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var datos map[string]string
 	if err := c.BodyParser(&datos); err != nil {
 		return err
@@ -49,7 +47,6 @@ func Ingresar(c *fiber.Ctx) error {
 			"contrasena":  "1234"
 		}
 	*/
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var datos map[string]string
 	if err := c.BodyParser(&datos); err != nil {
 		return err
@@ -85,7 +82,6 @@ func Ingresar(c *fiber.Ctx) error {
 }
 
 func Usuario(c *fiber.Ctx) error {
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	cookie := c.Cookies("nd-jwt")
 	id, err := utilidades.ParsearJWT(cookie)
 	if err != nil {
@@ -100,7 +96,6 @@ func Usuario(c *fiber.Ctx) error {
 }
 
 func Salir(c *fiber.Ctx) error {
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	cookie := fiber.Cookie{
 		Name:     "nd-jwt",
 		Value:    "",

@@ -20,7 +20,6 @@ func Escribeme(c *fiber.Ctx) error {
 			"mensaje": "Hola chevi. Qué tal estás?"
 		}
 	*/
-	c.Response().Header.Set("Access-Control-Allow-Origin", os.Getenv("CORS_DOMINIO_PERMITIDO"))
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
 		return err
