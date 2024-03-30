@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"nd-back/bbdd"
@@ -19,5 +20,8 @@ func main() {
 		MaxAge:           86400,
 	}))
 	rutas.Configuracion(app)
-	app.Listen(":" + os.Getenv("PORT"))
+	err := app.Listen(":" + os.Getenv("PORT"))
+	if err != nil {
+		fmt.Println(err)
+	}
 }
