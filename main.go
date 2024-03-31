@@ -12,6 +12,12 @@ import (
 func main() {
 	bbdd.Conectar()
 	app := fiber.New()
+	app.Use(func(c *fiber.Ctx) error {
+		if c.Hostname() != os.Getenv("HOSTNAME_PERMITIDO") {
+			return c.SendStatus(fiber.StatusForbidden)
+		}
+		return c.Next()
+	})
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin, Authorization",
 		AllowOrigins:     os.Getenv("CORS_DOMINIO_PERMITIDO"), // http://localhost:3000
