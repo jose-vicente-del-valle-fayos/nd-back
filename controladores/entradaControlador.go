@@ -40,7 +40,7 @@ func TodasEntradas(c *fiber.Ctx) error {
 	})
 }
 
-func EntradasSinPaginar(c *fiber.Ctx) error {
+func ExtractoTodas(c *fiber.Ctx) error {
 	var entradas []modelos.Entrada
 	bbdd.DB.Select("Id", "Titulo", "Fecha", "Contenido").Order("fecha desc").Find(&entradas)
 	return c.JSON(fiber.Map{

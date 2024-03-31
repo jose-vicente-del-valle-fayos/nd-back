@@ -19,9 +19,9 @@ func Configuracion(app *fiber.App) {
 	}
 	app.Post("/ingresar", controladores.Ingresar)
 	app.Get("/entrada/:id", controladores.LeerEntrada)
-	app.Get("/entradas", controladores.TodasEntradas)   // Muestra las entradas paginadas
-	app.Get("/todas", controladores.EntradasSinPaginar) // Muestra las entradas sin paginar
-	app.Get("/especial", controladores.TodasEntradas)   // Muestra las entradas ver parametros del query
+	app.Get("/entradas", controladores.TodasEntradas) // Muestra las entradas paginadas
+	app.Get("/todas", controladores.ExtractoTodas)    // Muestra las entradas sin paginar
+	app.Get("/especial", controladores.TodasEntradas) // Muestra las entradas ver parametros del query
 	app.Get("/comentarios", controladores.TodosComentarios)
 	app.Post("/escribeme", controladores.Escribeme)
 	app.Use(middlewares.Autenticado)
