@@ -14,7 +14,7 @@ func main() {
 	bbdd.Conectar()
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
-		waf, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("./coraza.conf"))
+		waf, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("./coraza.conf").WithDirectivesFromFile("./crs-setup.conf").WithDirectivesFromFile("./rules/*.conf"))
 		if err != nil {
 			fmt.Println(err)
 			return c.SendStatus(fiber.StatusInternalServerError)
@@ -28,17 +28,18 @@ func main() {
 			}
 		}()
 		tx.ProcessConnection(c.IP(), 443, "216.24.57.4", 10000)
-		if it1 := tx.ProcessRequestHeaders(); it1 != nil {
-			fmt.Printf("transacción interrumpida con estado %d\n", it1.Status)
+		if it1 := tx.ProcessRequestHeaders(); it1.Status != 0 {
+			fmt.Printf("transacción durante el procesamiento de headers interrumpida con estado %d\n", it1.Status)
+			fmt.Printf(it1.Data)
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
 		it2, err := tx.ProcessRequestBody()
-		if it2 != nil || err != nil {
-			fmt.Printf("transacción interrumpida con estado %d\n", it2.Status)
+		if it2.Status != 0 || err != nil {
+			fmt.Printf("transacción durante el procesamiento de body interrumpida con estado %d\n", it2.Status)
+			fmt.Printf(it2.Data)
 			fmt.Println(err)
 			return c.SendStatus(fiber.StatusInternalServerError)
 		}
-		// fmt.Println("la transacción se ha procesado con éxito")
 		return c.Next()
 	})
 	app.Use(func(c *fiber.Ctx) error {
