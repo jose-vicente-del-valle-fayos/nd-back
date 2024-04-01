@@ -9,11 +9,15 @@ require (
 	cloud.google.com/go/iam v0.13.0 // indirect
 	cloud.google.com/go/storage v1.29.0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/antchfx/jsonquery v1.1.4 // indirect
+	github.com/antchfx/xmlquery v1.3.6 // indirect
+	github.com/antchfx/xpath v1.1.10 // indirect
 	github.com/aws/aws-sdk-go v1.44.296 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/bitfield/script v0.22.0 // indirect
 	github.com/codingsince1985/checksum v1.3.0 // indirect
+	github.com/corazawaf/coraza/v3 v3.1.0 // indirect
 	github.com/corazawaf/libinjection-go v0.1.3 // indirect
 	github.com/daniel-hutao/spinlock v0.1.0 // indirect
 	github.com/dwisiswant0/clientip v0.3.0 // indirect
@@ -38,6 +42,7 @@ require (
 	github.com/hashicorp/go-getter v1.7.2 // indirect
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
 	github.com/hashicorp/go-version v1.6.0 // indirect
+	github.com/ip2location/ip2location-go/v9 v9.1.0 // indirect
 	github.com/itchyny/gojq v0.12.12 // indirect
 	github.com/itchyny/timefmt-go v0.1.5 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
@@ -55,8 +60,11 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.26 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
+	github.com/oschwald/geoip2-golang v1.5.0 // indirect
+	github.com/oschwald/maxminddb-golang v1.8.0 // indirect
 	github.com/otiai10/copy v1.14.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/pcktdmp/cef v0.2.0 // indirect
 	github.com/petar-dambovaliev/aho-corasick v0.0.0-20230725210150-fb29fc3c913e // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/projectdiscovery/blackrock v0.0.1 // indirect
