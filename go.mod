@@ -17,7 +17,6 @@ require (
 	github.com/bgentry/go-netrc v0.0.0-20140422174119-9fd32a8b3d3d // indirect
 	github.com/bitfield/script v0.22.0 // indirect
 	github.com/codingsince1985/checksum v1.3.0 // indirect
-	github.com/corazawaf/coraza/v3 v3.1.0 // indirect
 	github.com/corazawaf/libinjection-go v0.1.3 // indirect
 	github.com/daniel-hutao/spinlock v0.1.0 // indirect
 	github.com/dwisiswant0/clientip v0.3.0 // indirect
