@@ -14,7 +14,12 @@ func main() {
 	bbdd.Conectar()
 	app := fiber.New()
 	app.Use(func(c *fiber.Ctx) error {
-		waf, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectivesFromFile("./coraza.conf").WithDirectivesFromFile("./crs-setup.conf").WithDirectivesFromFile("./rules/*.conf"))
+		waf, err := coraza.NewWAF(coraza.NewWAFConfig().WithDirectives(`SecRule REMOTE_ADDR "@rx .*" "id:1,phase:1,deny,status:403"`))
+		/*.
+		WithDirectivesFromFile("./coraza.conf").
+		WithDirectivesFromFile("./crs-configuracion.conf").
+		WithDirectivesFromFile("./normas/*.conf")*/
+		// WithDirectives(fmt.Sprintf(`SecRule SERVER_PORT "!@eq %s" "id:1,phase:1,nolog,deny,status:403"`, 80)))
 		if err != nil {
 			fmt.Println(err)
 			return c.SendStatus(fiber.StatusInternalServerError)
