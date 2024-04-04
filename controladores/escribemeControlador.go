@@ -8,15 +8,20 @@ import (
 	"nd-back/modelos"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 )
 
-var envioPermitido = true
-var tiemposLlamada = make(map[int]time.Time)
-var mu sync.Mutex
+var bloquearEnvio = false
+var tiempoLlamada = time.Now().Add(-1 * GetEnvDuracion("CORREO_TIMEOUT_TRAMO_5"))
+var numLlamadas = map[int]int{
+	1: 0,
+	2: 0,
+	3: 0,
+	4: 0,
+	5: 0,
+}
 
-func getEnvMaxLlam(key string) int {
+func GetEnvMaxLlam(key string) int {
 	val, err := strconv.Atoi(os.Getenv(key))
 	if err != nil {
 		fmt.Println(err)
@@ -24,7 +29,7 @@ func getEnvMaxLlam(key string) int {
 	return val
 }
 
-func getEnvDuracion(key string) time.Duration {
+func GetEnvDuracion(key string) time.Duration {
 	val, err := strconv.Atoi(os.Getenv(key))
 	if err != nil {
 		fmt.Println(err)
@@ -32,26 +37,11 @@ func getEnvDuracion(key string) time.Duration {
 	return time.Duration(val) * time.Second
 }
 
-func ComprobarLlamada(tramo int, maxLlamadas int, intervalo time.Duration) bool {
-	mu.Lock()
-	defer mu.Unlock()
-	now := time.Now()
-	for k, v := range tiemposLlamada {
-		if now.Sub(v) > intervalo {
-			delete(tiemposLlamada, k)
-		}
+func ComprobarBloqueo(tramo int, maxLlamadas int, intervalo time.Duration) bool {
+	if time.Now().Sub(tiempoLlamada) > intervalo {
+		numLlamadas[tramo] = 0
 	}
-	tiemposLlamada[tramo] = now
-	return len(tiemposLlamada) > maxLlamadas
-}
-
-func CambiarEstado(tramo int) {
-	switch tramo {
-	case 1, 2, 3, 4, 5:
-		envioPermitido = false
-	default:
-		envioPermitido = true
-	}
+	return numLlamadas[tramo] > maxLlamadas
 }
 
 func Escribeme(c *fiber.Ctx) error {
@@ -63,37 +53,28 @@ func Escribeme(c *fiber.Ctx) error {
 		}
 	*/
 
-	go func() {
-		t, e := strconv.Atoi(os.Getenv("CORREO_TIMEOUT_TRAMO_5"))
-		if e != nil {
-			fmt.Println(e)
+	tramos := []struct {
+		maxLlamadas int
+		timeout     time.Duration
+	}{
+		{GetEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_1"), GetEnvDuracion("CORREO_TIMEOUT_TRAMO_1")},
+		{GetEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_2"), GetEnvDuracion("CORREO_TIMEOUT_TRAMO_2")},
+		{GetEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_3"), GetEnvDuracion("CORREO_TIMEOUT_TRAMO_3")},
+		{GetEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_4"), GetEnvDuracion("CORREO_TIMEOUT_TRAMO_4")},
+		{GetEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_5"), GetEnvDuracion("CORREO_TIMEOUT_TRAMO_5")},
+	}
+	bloquearEnvio = false
+	for i, tramo := range tramos {
+		if ComprobarBloqueo(i+1, tramo.maxLlamadas, tramo.timeout) {
+			bloquearEnvio = true
 		}
-		for i := 0; i < (t / 10); i++ {
-			time.Sleep(10 * time.Second)
-			tramos := []struct {
-				maxLlamadas int
-				timeout     time.Duration
-			}{
-				{getEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_1"), getEnvDuracion("CORREO_TIMEOUT_TRAMO_1")},
-				{getEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_2"), getEnvDuracion("CORREO_TIMEOUT_TRAMO_2")},
-				{getEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_3"), getEnvDuracion("CORREO_TIMEOUT_TRAMO_3")},
-				{getEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_4"), getEnvDuracion("CORREO_TIMEOUT_TRAMO_4")},
-				{getEnvMaxLlam("CORREO_MAX_LLAMADAS_TRAMO_5"), getEnvDuracion("CORREO_TIMEOUT_TRAMO_5")},
-			}
-
-			for i, tramo := range tramos {
-				if ComprobarLlamada(i+1, tramo.maxLlamadas, tramo.timeout) {
-					CambiarEstado(i + 1)
-				}
-			}
-		}
-	}()
+	}
 
 	var correo modelos.Correo
 	if err := c.BodyParser(&correo); err != nil {
 		return err
 	}
-	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && envioPermitido {
+	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && !bloquearEnvio {
 		m := gomail.NewMessage()
 		m.SetHeader("From", m.FormatAddress(os.Getenv("CORREO_FROM"), "Nuestro Diario") /* email */)
 		m.SetHeader("To", os.Getenv("CORREO_TO"))
@@ -106,6 +87,10 @@ func Escribeme(c *fiber.Ctx) error {
 		if err != nil {
 			return err
 		} else {
+			tiempoLlamada = time.Now()
+			for t, v := range numLlamadas {
+				numLlamadas[t] = v + 1
+			}
 			return c.JSON(correo)
 		}
 	} else {
