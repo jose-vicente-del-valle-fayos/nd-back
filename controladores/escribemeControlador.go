@@ -74,7 +74,7 @@ func Escribeme(c *fiber.Ctx) error {
 	if err := c.BodyParser(&correo); err != nil {
 		return err
 	}
-	if (correo.Nombre != "") && (correo.Correo != "") && (correo.Mensaje != "") && !bloquearEnvio {
+	if correo.ValidarNombre() && correo.ValidarCorreo() && correo.ValidarMensaje() && !bloquearEnvio {
 		m := gomail.NewMessage()
 		m.SetHeader("From", m.FormatAddress(os.Getenv("CORREO_FROM"), "Nuestro Diario") /* email */)
 		m.SetHeader("To", os.Getenv("CORREO_TO"))
