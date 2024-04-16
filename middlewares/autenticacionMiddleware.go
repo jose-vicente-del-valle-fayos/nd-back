@@ -5,6 +5,7 @@ import (
 	"nd-back/utilidades"
 )
 
+// Autenticado tests if some user is authenticated by parsing a JWT
 func Autenticado(c *fiber.Ctx) error {
 	cookie := c.Cookies("nd-jwt")
 	if _, err := utilidades.ParsearJWT(cookie); err != nil {

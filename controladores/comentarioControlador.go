@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// TodosComentarios returns all comments
 func TodosComentarios(c *fiber.Ctx) error {
 	var comentarios []modelos.Comentario
 	bbdd.DB.Find(&comentarios)
@@ -20,16 +21,16 @@ func TodosComentarios(c *fiber.Ctx) error {
 	})
 }
 
+// CrearComentario creates a comment
+//
+//	{
+//		"id_ent": 	1,
+//		"usuario":    "Sara",
+//		"correo":     "sara@gmail.com",
+//		"fecha":      "2018-04-02",
+//		"comentario": "Hola Chevi. Eres el mejor."
+//	}
 func CrearComentario(c *fiber.Ctx) error {
-	/*
-		{
-			"id_ent": 	1,
-			"usuario":    "Sara",
-			"correo":     "sara@gmail.com",
-			"fecha":      "2018-04-02",
-			"comentario": "Hola Chevi. Eres el mejor."
-		}
-	*/
 	var comentario modelos.Comentario
 	if err := c.BodyParser(&comentario); err != nil {
 		return err
@@ -41,6 +42,7 @@ func CrearComentario(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
+// LeerComentario reads a comment taking the comment's id as an URL parameter
 func LeerComentario(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -53,16 +55,16 @@ func LeerComentario(c *fiber.Ctx) error {
 	return c.JSON(comentario)
 }
 
+// ActualizarComentario updates a comment
+//
+//	{
+//		"id_ent": 	1,
+//		"usuario":    "Sara actualizada",
+//		"correo":     "saractualizada@gmail.com",
+//		"fecha":      "2018-04-03",
+//		"comentario": "Hola Chevi. Eres el mejor del mundo mundial."
+//	}
 func ActualizarComentario(c *fiber.Ctx) error {
-	/*
-		{
-			"id_ent": 	1,
-			"usuario":    "Sara actualizada",
-			"correo":     "saractualizada@gmail.com",
-			"fecha":      "2018-04-03",
-			"comentario": "Hola Chevi. Eres el mejor del mundo mundial."
-		}
-	*/
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -80,6 +82,7 @@ func ActualizarComentario(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
+// BorrarComentario deletes a comment taking the comment's id as a parameter
 func BorrarComentario(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {

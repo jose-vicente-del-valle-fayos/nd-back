@@ -44,15 +44,14 @@ func ComprobarBloqueo(tramo int, maxLlamadas int, intervalo time.Duration) bool 
 	return numLlamadas[tramo] > maxLlamadas
 }
 
+// Escribeme sends an email to the ND owner
+//
+//	{
+//		"nombre": "Chevi",
+//		"correo": "chevielmejor@gmail.com",
+//		"mensaje": "Hola chevi. Qué tal estás?"
+//	}
 func Escribeme(c *fiber.Ctx) error {
-	/*
-		{
-			"nombre": "Chevi",
-			"correo": "chevielmejor@gmail.com",
-			"mensaje": "Hola chevi. Qué tal estás?"
-		}
-	*/
-
 	tramos := []struct {
 		maxLlamadas int
 		timeout     time.Duration

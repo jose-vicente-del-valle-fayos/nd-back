@@ -9,17 +9,17 @@ import (
 	"time"
 )
 
+// Registrar registers a new user
+//
+//	{
+//		"sobrenombre": "Chevi",
+//		"nombre":      "José Vicente",
+//		"apellidos":   "del Valle Fayos",
+//		"correo":      "hola@chevi.soy",
+//		"contrasena":  "almasera",
+//	    "contrasenaconf": "almasera"
+//	}
 func Registrar(c *fiber.Ctx) error {
-	/*
-		{
-			"sobrenombre": "Chevi",
-			"nombre":      "José Vicente",
-			"apellidos":   "del Valle Fayos",
-			"correo":      "hola@chevi.soy",
-			"contrasena":  "almasera",
-		    "contrasenaconf": "almasera"
-		}
-	*/
 	var datos map[string]string
 	if err := c.BodyParser(&datos); err != nil {
 		return err
@@ -40,13 +40,13 @@ func Registrar(c *fiber.Ctx) error {
 	return c.JSON(usuario)
 }
 
+// Ingresar allows to login a user
+//
+//	{
+//		"correo":      "hola@chevi.soy",
+//		"contrasena":  "1234"
+//	}
 func Ingresar(c *fiber.Ctx) error {
-	/*
-		{
-			"correo":      "hola@chevi.soy",
-			"contrasena":  "1234"
-		}
-	*/
 	var datos map[string]string
 	if err := c.BodyParser(&datos); err != nil {
 		return err
@@ -81,6 +81,7 @@ func Ingresar(c *fiber.Ctx) error {
 	})
 }
 
+// Usuario checks is a user is logged
 func Usuario(c *fiber.Ctx) error {
 	cookie := c.Cookies("nd-jwt")
 	id, err := utilidades.ParsearJWT(cookie)
@@ -95,6 +96,7 @@ func Usuario(c *fiber.Ctx) error {
 	return c.JSON(usuario)
 }
 
+// Salir makes the JWT expired
 func Salir(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{
 		Name:     "nd-jwt",

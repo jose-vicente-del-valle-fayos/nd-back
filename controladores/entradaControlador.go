@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// TodasEntradas returns an array of entries inside datos, with some metadata. It can be called with some URL parameters like limite, pagina and especial
 func TodasEntradas(c *fiber.Ctx) error {
 	limite, err := strconv.Atoi(c.Query("limite", strconv.Itoa(math.MaxInt32)))
 	if err != nil {
@@ -40,6 +41,7 @@ func TodasEntradas(c *fiber.Ctx) error {
 	})
 }
 
+// ExtractoTodas returns an array with entries extract data inside datos
 func ExtractoTodas(c *fiber.Ctx) error {
 	var entradas []modelos.Entrada
 	bbdd.DB.Select("Id", "Titulo", "Fecha", "Contenido").Order("fecha desc").Find(&entradas)
@@ -48,17 +50,17 @@ func ExtractoTodas(c *fiber.Ctx) error {
 	})
 }
 
+// CrearEntrada creates an entry
+//
+//	{
+//		"id_us": 1,
+//		"usuario": "Chevi",
+//		"especial": false,
+//		"titulo": "Esta es una entrada fantástica",
+//		"fecha": "2024-02-22",
+//		"contenido": "Este es un contenido fantástico."
+//	}
 func CrearEntrada(c *fiber.Ctx) error {
-	/*
-		{
-			"id_us": 1,
-			"usuario": "Chevi",
-			"especial": false,
-			"titulo": "Esta es una entrada fantástica",
-			"fecha": "2024-02-22",
-			"contenido": "Este es un contenido fantástico."
-		}
-	*/
 	var entrada modelos.Entrada
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
@@ -70,6 +72,7 @@ func CrearEntrada(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
+// LeerEntrada reads an entry taking entry's id as an URL parameter
 func LeerEntrada(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -83,18 +86,18 @@ func LeerEntrada(c *fiber.Ctx) error {
 	})
 }
 
+// ActualizarEntrada updates an entry
+//
+//	{
+//		"id_us": 1,
+//		"usuario": "Susanita",
+//		"especial": false,
+//		"titulo": "Esta es una entrada actualizada",
+//		"fecha": "2024-02-22",
+//		"contenido": "Este es un contenido actualizado.",
+//		"comentarios": []
+//	}
 func ActualizarEntrada(c *fiber.Ctx) error {
-	/*
-		{
-			"id_us": 1,
-			"usuario": "Susanita",
-			"especial": false,
-			"titulo": "Esta es una entrada actualizada",
-			"fecha": "2024-02-22",
-			"contenido": "Este es un contenido actualizado.",
-			"comentarios": []
-		}
-	*/
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -112,6 +115,7 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
+// BorrarEntrada deletes an entry taking the entry's id as an URL parameter
 func BorrarEntrada(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 
 var DB *gorm.DB
 
+// Conectar connects the API to the database and initializes Usuario, Entrada and Comentario if they aren't initialized
 func Conectar() {
 	// db, err := gorm.Open(postgres.Open("postgresql://postgres:almasera@localhost:5432/nd"), &gorm.Config{})
 	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})

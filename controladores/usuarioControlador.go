@@ -7,21 +7,22 @@ import (
 	"strconv"
 )
 
+// TodosUsuarios returs all users
 func TodosUsuarios(c *fiber.Ctx) error {
 	var usuarios []modelos.Usuario
 	bbdd.DB.Preload("Entradas").Preload("Entradas.Comentarios").Find(&usuarios)
 	return c.JSON(usuarios)
 }
 
+// CrearUsuario creates a user
+//
+//	{
+//		"sobrenombre": "Chevi",
+//		"nombre":      "José Vicente",
+//		"apellidos":   "del Valle Fayos",
+//		"correo":      "hola@chevi.soy"
+//	}
 func CrearUsuario(c *fiber.Ctx) error {
-	/*
-		{
-			"sobrenombre": "Chevi",
-			"nombre":      "José Vicente",
-			"apellidos":   "del Valle Fayos",
-			"correo":      "hola@chevi.soy"
-		}
-	*/
 	var usuario modelos.Usuario
 	if err := c.BodyParser(&usuario); err != nil {
 		return err
@@ -31,6 +32,7 @@ func CrearUsuario(c *fiber.Ctx) error {
 	return c.JSON(usuario)
 }
 
+// LeerUsuario reads a user
 func LeerUsuario(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -44,15 +46,15 @@ func LeerUsuario(c *fiber.Ctx) error {
 	return c.JSON(usuario)
 }
 
+// ActualizarUsuario updates a user
+//
+//	{
+//		"sobrenombre": "Ramón",
+//		"nombre":      "Supermones rascajeribrother",
+//		"apellidos":   "Bronson",
+//		"correo":      "pato@gmail.com"
+//	}
 func ActualizarUsuario(c *fiber.Ctx) error {
-	/*
-		{
-			"sobrenombre": "Ramón",
-			"nombre":      "Supermones rascajeribrother",
-			"apellidos":   "Bronson",
-			"correo":      "pato@gmail.com"
-		}
-	*/
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return err
@@ -68,6 +70,7 @@ func ActualizarUsuario(c *fiber.Ctx) error {
 }
 
 /*
+// BorrarUsuario deletes a user
 func BorrarUsuario(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {

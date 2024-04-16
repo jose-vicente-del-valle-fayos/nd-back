@@ -4,6 +4,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Usuario stores a user
 type Usuario struct {
 	Id          uint      `json:"id" gorm:"unique"`
 	Sobrenombre string    `json:"sobrenombre" gorm:"type:VARCHAR(50); unique; not null"`
@@ -15,15 +16,18 @@ type Usuario struct {
 	TotalEnt    uint      `json:"total_ent" gorm:"-"`
 }
 
+// PonContrasena converts the password into a hash
 func (usuario *Usuario) PonContrasena(contrasena string) {
 	hashCont, _ := bcrypt.GenerateFromPassword([]byte(contrasena), 14)
 	usuario.Contrasena = hashCont
 }
 
+// ComparaContrasenas compares two passwords
 func (usuario *Usuario) ComparaContrasenas(contrasena string) error {
 	return bcrypt.CompareHashAndPassword(usuario.Contrasena, []byte(contrasena))
 }
 
+// CalcularTotalEntradas calculates the total sum of entradas
 func (usuario *Usuario) CalcularTotalEntradas() {
 	usuario.TotalEnt = uint(len(usuario.Entradas))
 }

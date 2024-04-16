@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// Configuracion selects a route and calls to a controller
 func Configuracion(app *fiber.App) {
 	reg, err := strconv.ParseBool(os.Getenv("REGISTRAR_ENABLED"))
 	if err != nil {
@@ -19,9 +20,9 @@ func Configuracion(app *fiber.App) {
 	}
 	app.Post("/ingresar", controladores.Ingresar)
 	app.Get("/entrada/:id", controladores.LeerEntrada)
-	app.Get("/entradas", controladores.TodasEntradas) // Muestra las entradas paginadas
-	app.Get("/todas", controladores.ExtractoTodas)    // Muestra las entradas sin paginar
-	app.Get("/especial", controladores.TodasEntradas) // Muestra las entradas ver parametros del query
+	app.Get("/entradas", controladores.TodasEntradas)
+	app.Get("/todas", controladores.ExtractoTodas)
+	app.Get("/especial", controladores.TodasEntradas)
 	app.Get("/comentarios", controladores.TodosComentarios)
 	app.Post("/escribeme", controladores.Escribeme)
 	app.Use(middlewares.Autenticado)
