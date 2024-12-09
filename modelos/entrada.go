@@ -4,14 +4,14 @@ import "time"
 
 // Entrada stores an entry
 type Entrada struct {
-	Id        uint   `json:"id" gorm:"unique"`
-	IdUs      uint   `json:"id_us" gorm:"not null"`
-	Usuario   string `json:"usuario" gorm:"type:VARCHAR(50); not null"`
-	Especial  *bool  `json:"especial" gorm:"not null"`
-	Titulo    string `json:"titulo" gorm:"type:VARCHAR(50); not null"`
-	Fecha     string `json:"fecha" gorm:"type:VARCHAR(10); not null"`
-	Contenido string `json:"contenido" gorm:"not null"`
-	// Imagen      string       `json:"imagen" gorm:"null"`
+	Id          uint         `json:"id" gorm:"unique"`
+	IdUs        uint         `json:"id_us" gorm:"not null"`
+	Usuario     string       `json:"usuario" gorm:"type:VARCHAR(50); not null"`
+	Especial    *bool        `json:"especial" gorm:"not null"`
+	Titulo      string       `json:"titulo" gorm:"type:VARCHAR(50); not null"`
+	Fecha       string       `json:"fecha" gorm:"type:VARCHAR(10); not null"`
+	Contenido   string       `json:"contenido" gorm:"not null"`
+	Imagen      string       `json:"imagen" gorm:"sin-imagen"`
 	Comentarios []Comentario `json:"comentarios" gorm:"foreignKey:IdEnt"`
 	TotalCom    uint         `json:"total_com" gorm:"-"`
 	Visitas     uint         `json:"visitas" gorm:"default:0"`

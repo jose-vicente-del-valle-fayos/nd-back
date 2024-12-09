@@ -1,11 +1,15 @@
 package controladores
 
 import (
+	"github.com/cloudinary/cloudinary-go"
+	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
+	"io"
 	"math"
 	"nd-back/bbdd"
 	"nd-back/modelos"
+	"os"
 	"strconv"
 )
 
@@ -62,9 +66,11 @@ func ExtractoTodas(c *fiber.Ctx) error {
 //	}
 func CrearEntrada(c *fiber.Ctx) error {
 	var entrada modelos.Entrada
+	urlImagen := SubirImagen(c, int(entrada.Id))
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
 	}
+	entrada.Imagen = urlImagen
 	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
 		bbdd.DB.Create(&entrada)
 		return c.JSON(entrada)
@@ -102,8 +108,10 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	urlImagen := SubirImagen(c, id)
 	entrada := modelos.Entrada{
-		Id: uint(id),
+		Id:     uint(id),
+		Imagen: urlImagen,
 	}
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
@@ -126,4 +134,21 @@ func BorrarEntrada(c *fiber.Ctx) error {
 	}
 	bbdd.DB.Delete(&entrada)
 	return nil
+}
+
+// SubirImagen uploads any file to Cloudinary
+func SubirImagen(c *fiber.Ctx, id int) string {
+	fileHeader, _ := c.FormFile("imagen-entrada")
+	file, err := fileHeader.Open()
+	if err != nil {
+		return "sin-imagen"
+	}
+	defer file.Close()
+	fileContent, _ := io.ReadAll(file)
+	cloudName := os.Getenv("CLOUD_NAME")
+	apiKey := os.Getenv("CLOUD_API_KEY")
+	apiSecret := os.Getenv("CLOUD_API_SECRET")
+	cld, _ := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
+	upload, _ := cld.Upload.Upload(c.Context(), fileContent, uploader.UploadParams{PublicID: "nd/" + strconv.Itoa(id), ResourceType: "auto", Overwrite: true})
+	return upload.SecureURL
 }
