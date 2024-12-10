@@ -117,9 +117,7 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 		return err
 	}
 	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
-		urlImagen := SubirImagen(c, int(entrada.Id))
-		entrada.Imagen = urlImagen
-		bbdd.DB.Model(&entrada).Updates(entrada)
+		bbdd.DB.Model(&entrada).Updates(SubirImagen(c, int(entrada.Id)))
 		return c.JSON(entrada)
 	}
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
@@ -139,6 +137,52 @@ func BorrarEntrada(c *fiber.Ctx) error {
 }
 
 // SubirImagen uploads any file to Cloudinary
+func SubirImagen(c *fiber.Ctx, id int) string {
+	fmt.Println(id)
+	idStr := strconv.Itoa(id)
+	fileHeader, err := c.FormFile("imagen-entrada")
+	if err != nil {
+		fmt.Println("no se pudo obtener el archivo:", err)
+		return "sin-imagen"
+	}
+	file, err := fileHeader.Open()
+	if err != nil {
+		fmt.Println("error al abrir el archivo:", err)
+		return "sin-imagen"
+	}
+	defer file.Close()
+	fileContent, err := io.ReadAll(file)
+	if err != nil {
+		fmt.Println("error al leer el archivo:", err)
+		return "sin-imagen"
+	}
+	cloudName := os.Getenv("CLOUD_NAME")
+	apiKey := os.Getenv("CLOUD_API_KEY")
+	apiSecret := os.Getenv("CLOUD_API_SECRET")
+	if cloudName == "" || apiKey == "" || apiSecret == "" {
+		fmt.Println("faltan las credenciales de Cloudinary")
+		return "sin-imagen"
+	}
+	cld, err := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
+	if err != nil {
+		fmt.Println("error al inicializar Cloudinary:", err)
+		return "sin-imagen"
+	}
+	upload, err := cld.Upload.Upload(c.Context(), fileContent, uploader.UploadParams{
+		PublicID:         "nd/" + idStr,
+		ResourceType:     "auto",
+		Overwrite:        true,
+		FilenameOverride: idStr,
+	})
+	if err != nil {
+		fmt.Println("error al subir el archivo:", err)
+		return "sin-imagen"
+	}
+	fmt.Println("archivo subido con éxito:", upload.SecureURL)
+	return upload.SecureURL
+}
+
+/*
 func SubirImagen(c *fiber.Ctx, id int) string {
 	fmt.Println(id)
 	idStr := strconv.Itoa(id)
@@ -166,3 +210,4 @@ func SubirImagen(c *fiber.Ctx, id int) string {
 	fmt.Println(upload.SecureURL)
 	return upload.SecureURL
 }
+*/
