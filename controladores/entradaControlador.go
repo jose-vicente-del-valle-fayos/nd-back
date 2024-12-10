@@ -142,30 +142,30 @@ func SubirImagen(c *fiber.Ctx, id int) string {
 	idStr := strconv.Itoa(id)
 	fileHeader, err := c.FormFile("imagen-entrada")
 	if err != nil {
-		fmt.Println("no se pudo obtener el archivo:", err)
+		fmt.Printf("no se pudo obtener el archivo:", err)
 		return "sin-imagen"
 	}
 	file, err := fileHeader.Open()
 	if err != nil {
-		fmt.Println("error al abrir el archivo:", err)
+		fmt.Printf("error al abrir el archivo:", err)
 		return "sin-imagen"
 	}
 	defer file.Close()
 	fileContent, err := io.ReadAll(file)
 	if err != nil {
-		fmt.Println("error al leer el archivo:", err)
+		fmt.Printf("error al leer el archivo:", err)
 		return "sin-imagen"
 	}
 	cloudName := os.Getenv("CLOUD_NAME")
 	apiKey := os.Getenv("CLOUD_API_KEY")
 	apiSecret := os.Getenv("CLOUD_API_SECRET")
 	if cloudName == "" || apiKey == "" || apiSecret == "" {
-		fmt.Println("faltan las credenciales de Cloudinary")
+		fmt.Printf("faltan las credenciales de Cloudinary")
 		return "sin-imagen"
 	}
 	cld, err := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
 	if err != nil {
-		fmt.Println("error al inicializar Cloudinary:", err)
+		fmt.Printf("error al inicializar Cloudinary:", err)
 		return "sin-imagen"
 	}
 	upload, err := cld.Upload.Upload(c.Context(), fileContent, uploader.UploadParams{
@@ -175,10 +175,10 @@ func SubirImagen(c *fiber.Ctx, id int) string {
 		FilenameOverride: idStr,
 	})
 	if err != nil {
-		fmt.Println("error al subir el archivo:", err)
+		fmt.Printf("error al subir el archivo:", err)
 		return "sin-imagen"
 	}
-	fmt.Println("archivo subido con éxito:", upload.SecureURL)
+	fmt.Printf("archivo subido con éxito:", upload.SecureURL)
 	return upload.SecureURL
 }
 
