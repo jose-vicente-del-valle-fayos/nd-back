@@ -1,6 +1,7 @@
 package controladores
 
 import (
+	"fmt"
 	"github.com/cloudinary/cloudinary-go"
 	"github.com/cloudinary/cloudinary-go/api/uploader"
 	"github.com/gofiber/fiber/v2"
@@ -138,6 +139,7 @@ func BorrarEntrada(c *fiber.Ctx) error {
 
 // SubirImagen uploads any file to Cloudinary
 func SubirImagen(c *fiber.Ctx, id int) string {
+	idStr := strconv.Itoa(id)
 	fileHeader, _ := c.FormFile("imagen-entrada")
 	file, err := fileHeader.Open()
 	if err != nil {
@@ -148,7 +150,14 @@ func SubirImagen(c *fiber.Ctx, id int) string {
 	cloudName := os.Getenv("CLOUD_NAME")
 	apiKey := os.Getenv("CLOUD_API_KEY")
 	apiSecret := os.Getenv("CLOUD_API_SECRET")
-	cld, _ := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
-	upload, _ := cld.Upload.Upload(c.Context(), fileContent, uploader.UploadParams{PublicID: "nd/" + strconv.Itoa(id), ResourceType: "auto", Overwrite: true})
+	cld, err := cloudinary.NewFromParams(cloudName, apiKey, apiSecret)
+	if err != nil {
+		fmt.Println(err)
+	}
+	upload, err := cld.Upload.Upload(c.Context(), fileContent, uploader.UploadParams{PublicID: "nd/" + strconv.Itoa(id), ResourceType: "auto", Overwrite: true, FilenameOverride: idStr})
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(upload.SecureURL)
 	return upload.SecureURL
 }
