@@ -72,8 +72,8 @@ func CrearEntrada(c *fiber.Ctx) error {
 	}
 	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
 		bbdd.DB.Create(&entrada)
-		urlImagen := SubirImagen(c, int(entrada.Id))
-		entrada.Imagen = urlImagen
+		fmt.Println("entrada: " + strconv.Itoa(int(entrada.Id)))
+		entrada.Imagen = SubirImagen(c, int(entrada.Id))
 		bbdd.DB.Model(&entrada).Where("id = ?", entrada.Id).Updates(entrada)
 		return c.JSON(entrada)
 	}
