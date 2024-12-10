@@ -67,15 +67,16 @@ func ExtractoTodas(c *fiber.Ctx) error {
 //	}
 func CrearEntrada(c *fiber.Ctx) error {
 	var entrada modelos.Entrada
-	urlImagen := SubirImagen(c, int(entrada.Id))
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
 	}
-	entrada.Imagen = urlImagen
 	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
 		bbdd.DB.Create(&entrada)
 		return c.JSON(entrada)
 	}
+	urlImagen := SubirImagen(c, int(entrada.Id))
+	entrada.Imagen = urlImagen
+	bbdd.DB.Model(&entrada).Updates(entrada)
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
@@ -109,10 +110,8 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	urlImagen := SubirImagen(c, id)
 	entrada := modelos.Entrada{
-		Id:     uint(id),
-		Imagen: urlImagen,
+		Id: uint(id),
 	}
 	if err := c.BodyParser(&entrada); err != nil {
 		return err
@@ -121,6 +120,12 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 		bbdd.DB.Model(&entrada).Updates(entrada)
 		return c.JSON(entrada)
 	}
+	urlImagen := SubirImagen(c, int(entrada.Id))
+	if err := c.BodyParser(&entrada); err != nil {
+		return err
+	}
+	entrada.Imagen = urlImagen
+	bbdd.DB.Model(&entrada).Updates(entrada)
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
