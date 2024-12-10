@@ -16,4 +16,4 @@ Version 7 **includes**:
 - AJAX navigation and form submission
 - Multimedia content publishing
 
-This version **does not include** indexing capability (webapps do not index).
+This version **does not include** indexing capability.
