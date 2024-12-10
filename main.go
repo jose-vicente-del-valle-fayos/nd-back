@@ -20,7 +20,7 @@ func main() {
 	})
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Access-Control-Allow-Origin, Authorization",
-		AllowOrigins:     "https://nuestrodiario.es, https://api.cloudinary.com", // os.Getenv("CORS_DOMINIO_PERMITIDO_1") + ", " + os.Getenv("CORS_DOMINIO_PERMITIDO_2"), // http://localhost:3000,
+		AllowOrigins:     os.Getenv("CORS_DOMINIO_PERMITIDO_1") + ", " + os.Getenv("CORS_DOMINIO_PERMITIDO_2"), // http://localhost:3000,
 		AllowCredentials: true,
 		AllowMethods:     "GET, POST, PUT, DELETE",
 		MaxAge:           86400,
