@@ -48,6 +48,7 @@ func (entrada *Entrada) ValidarTitulo() bool {
 	return entrada.Titulo != ""
 }
 
+// ValidarContenido validates a title
 func (entrada *Entrada) ValidarContenido() bool {
 	return entrada.Contenido != ""
 }
