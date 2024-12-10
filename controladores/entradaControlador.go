@@ -139,6 +139,7 @@ func BorrarEntrada(c *fiber.Ctx) error {
 
 // SubirImagen uploads any file to Cloudinary
 func SubirImagen(c *fiber.Ctx, id int) string {
+	fmt.Println(id)
 	idStr := strconv.Itoa(id)
 	fileHeader, err := c.FormFile("imagen-entrada")
 	if err != nil {
