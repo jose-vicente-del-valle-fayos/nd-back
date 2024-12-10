@@ -76,7 +76,7 @@ func CrearEntrada(c *fiber.Ctx) error {
 	}
 	urlImagen := SubirImagen(c, int(entrada.Id))
 	entrada.Imagen = urlImagen
-	bbdd.DB.Model(&entrada).Updates(entrada)
+	bbdd.DB.Model(&entrada).Where("id = ?", entrada.Id).Updates(entrada)
 	return c.JSON(fiber.Map{"mensaje": "error de validación"})
 }
 
@@ -117,7 +117,7 @@ func ActualizarEntrada(c *fiber.Ctx) error {
 		return err
 	}
 	if entrada.ValidarFecha() && entrada.ValidarIdUs() && entrada.ValidarUsuario() && entrada.ValidarTitulo() && entrada.ValidarContenido() {
-		bbdd.DB.Model(&entrada).Updates(entrada)
+		bbdd.DB.Model(&entrada).Where("id = ?", entrada.Id).Updates(entrada)
 		return c.JSON(entrada)
 	}
 	urlImagen := SubirImagen(c, int(entrada.Id))
