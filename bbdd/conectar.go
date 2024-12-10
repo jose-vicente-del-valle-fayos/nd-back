@@ -15,7 +15,7 @@ func Conectar() {
 	// db, err := gorm.Open(postgres.Open("postgresql://postgres:almasera@localhost:5432/nd"), &gorm.Config{})
 	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
-		panic("No se puede conectar a la base de datos.")
+		panic("no se puede conectar a la base de datos.")
 	}
 	err = db.AutoMigrate(&modelos.Usuario{})
 	if err != nil {
