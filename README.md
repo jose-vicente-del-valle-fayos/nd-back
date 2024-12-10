@@ -14,8 +14,6 @@ Version 7 **includes**:
 - Visit counter
 - Comments
 - AJAX navigation and form submission
-
-This version **does not include**:
-
 - Multimedia content publishing
-- Indexing capability (the applications do not index)
+
+This version **does not include** indexing capability (webapps do not index).
